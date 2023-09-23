@@ -1,42 +1,52 @@
-import Movie from "../components/Movie"
-import { useState, useEffect } from 'react';
-function Home() {
-    const [loading, setLoading] = useState(true);
-    const [movies, setMovies] = useState([])
+import React from "react";
+import axios from "axios";
+import Movie from "../components/Movie";
+import "./Home.css";
 
-    // How to call API modernly
-    const getMovies = async () => {
-        const json = await (
-            await fetch(
-                `https://yts.mx/api/v2/list_movies.json?minimum_rating=8.8&sort_by=year`
-            )
-        ).json();
-        // update movies to json.data.movies
-        setMovies(json.data.movies);
-        // update current loading status to false
-        setLoading(false);
+class Home extends React.Component {
+    state = {
+        isLoading: true,
+        movies: []
     };
-
-    // Call only once
-    useEffect(() => {
-        getMovies();
-    }, []);
-    return (
-        <div>
-            {loading ? <h1>Loading...</h1> :
-                <div>
-                    {movies.map((movie) => (
-                        <Movie
-                            key={movie.id}
-                            id={movie.id}
-                            coverImg={movie.medium_cover_image}
-                            title={movie.title}
-                            summary={movie.summary}
-                            genres={movie.genres} />
-                    ))}
-                </div>
+    getMovies = async () => {
+        const {
+            data: {
+                data: { movies }
             }
-        </div>
-    );
+        } = await axios.get(
+            "https://yts-proxy.now.sh/list_movies.json?sort_by=year"
+        );
+        this.setState({ movies, isLoading: false });
+    };
+    componentDidMount() {
+        this.getMovies();
+    }
+    render() {
+        const { isLoading, movies } = this.state;
+        return (
+            <section className="container">
+                {isLoading ? (
+                    <div className="loader">
+                        <span>Loading...</span>
+                    </div>
+                ) : (
+                    <div className="movies">
+                        {movies.map(movie => (
+                            <Movie
+                                key={movie.id}
+                                id={movie.id}
+                                year={movie.year}
+                                title={movie.title}
+                                summary={movie.summary}
+                                poster={movie.medium_cover_image}
+                                genres={movie.genres}
+                            />
+                        ))}
+                    </div>
+                )}
+            </section>
+        );
+    }
 }
+
 export default Home;

@@ -1,42 +1,45 @@
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-// useParams() -> returns id(the last one in path)
-import { Link } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {useParams} from 'react-router-dom';
+import MovieDetail from '../components/MovieDetail';
+import "./Detail.css";
 
 function Detail() {
-    const { id } = useParams();
+    const {id} = useParams();
     const [loading, setLoading] = useState(true);
-    const [currMovie, setCurrMovie] = useState("");
+    const [movieInfo, setMovieInfo] = useState([]);
 
-    const getMovie = async () => {
+    const getMovieInfo = async () => {
         const json = await (
             await fetch(`https://yts.mx/api/v2/movie_details.json?movie_id=${id}`)
         ).json();
-        // Give currMovie an inforamtion in form of json
-        setCurrMovie(json);
-        // set Loading status false
+        setMovieInfo(json.data.movie);
         setLoading(false);
     };
 
-    // Get API by using getMovie function
-    useEffect(() => {
-        getMovie();
-    }, [])
+    let nowUrl = window.location.pathname;
 
+    
+    useEffect(() => {
+        setLoading(true);
+        getMovieInfo();
+    }, [nowUrl]);
+    
     return (
-        <div className='detail'>
-            {loading ? <h1>Loading,,,</h1> : // if it is still on loading,, 
-                // if loading finished,,,
-                <div>
-                    <img src={currMovie.data.movie.medium_cover_image}></img>
-                    <h3> Title : {currMovie.data.movie.title}</h3>
-                    <h3> Genres : {currMovie.data.movie.genres[0]}</h3>
-                    <h3> Year : {currMovie.data.movie.year}</h3>
-                    <h3> Languages : {currMovie.data.movie.language}</h3>
-                    <button className='back-btn'><Link to='/'>dd</Link></button>
-                </div>
-            }
-        </div>
-    )
+        loading
+            ? <div className='container'>
+                <div className='loader'>
+                    <span>Loading....</span>
+                    </div>
+                    </div>
+            : <MovieDetail
+                url={movieInfo.url}
+                year={movieInfo.year}
+                rating={movieInfo.rating}
+                coverImg={movieInfo.medium_cover_image}
+                title={movieInfo.title_long}
+                summary={movieInfo.description_full}
+                genres={movieInfo.genres} />
+        );
 }
+
 export default Detail;

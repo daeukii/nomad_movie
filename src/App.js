@@ -1,16 +1,22 @@
-import { BrowserRouter as Router, Routes, Route, } from "react-router-dom";
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./routes/Home";
-import Movie from "./routes/Detail"
+import About from "./routes/About";
+import Detail from "./routes/Detail";
+import Navigation from "./components/Navigation";
 import "./App.css";
 
 function App() {
   return (
-    <Router>
+    <BrowserRouter>
+      <Navigation />
       <Routes>
-        <Route path="/movie/:id" element={<Movie />}></Route>
-        <Route path="/" element={<Home />}>go back</Route>
+      <Route path="/" exact={true} element={<Home/>} />
+      <Route path="/about" element={<About/>} />
+      <Route path="/movie/:id" element={<Detail/>} />
       </Routes>
-    </Router>
-  )
+    </BrowserRouter>
+  );
 }
-export default App; 
+
+export default App;
