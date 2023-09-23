@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import Movie from "../components/Movie";
 import "./Home.css";
+import BackToTopButton from "../components/BackToTopButton";
 
 class Home extends React.Component {
     state = {
@@ -42,6 +43,7 @@ class Home extends React.Component {
                                 genres={movie.genres}
                             />
                         ))}
+                        <BackToTopButton/>
                     </div>
                 )}
             </section>

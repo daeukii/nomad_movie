@@ -1,11 +1,10 @@
 .movies .movie {
     background-color: white;
     margin-bottom: 70px;
-    font-weight: 300;
     padding: 20px;
     border-radius: 5px;
-    color: #adaeb9;
-    box-shadow: 0 13px 27px -5px rgba(50, 50, 93, 0.25),
+    color: #6a6c7d;
+    box-shadow: 0 13px 27px -5px rgba(10, 10, 20, 0.541),
         0 8px 16px -8px rgba(0, 0, 0, 0.3), 0 -6px 16px -6px rgba(0, 0, 0, 0.025);
 }
 
@@ -42,7 +41,8 @@
 .movie .movie__title {
     margin-bottom: 5px;
     font-size: 24px;
-    color: #2c2c2c;
+    font-weight:500;
+    color: #000000;
 }
 
 .movie .movie__genres {
